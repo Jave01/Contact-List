@@ -26,14 +26,13 @@ class ContactHandler:
 
 
     def list_contacts(self):
-        self.contact_list = []
+        contact_list = []
         for name in self.contacts.keys():
-            self.contact_list.append([name, self.contacts[name]["mobile"], self.contacts[name]["home"], self.contacts[name]["email"], self.contacts[name]["address"]])
-        self._print_contacts()
+            contact_list.append([name, self.contacts[name]["mobile"], self.contacts[name]["home"], self.contacts[name]["email"], self.contacts[name]["address"]])
+        self._print_contacts(contact_list())
 
-
-    def _print_contacts(self):
-        for i, element in enumerate(sorted(self.contact_list, key=lambda x: x[0])):
+    def _print_contact(self, contacts: list):
+        for i, element in enumerate(sorted(contacts, key=lambda x: x[0])):
             if element != None:
                 print(f'{i+1}. ' + element[0])
                 print(f"\tmobile: {element[1]}")
@@ -41,13 +40,19 @@ class ContactHandler:
                 print(f"\temail: {element[3]}")
                 print(f"\tmobile: {element[4]}")
 
+    def search_contact(self, search_first_name, search_last_name):
+        for contact in self.contacts.keys():
+            first_name, last_name = self.contacts[contact].split()
+            if search_first_name in first_name\
+                    and search_last_name in last_name:
+                print(first_name, last_name)
 
-    def search_contact(self, first_name, last_name):
-        return self.contacts[f'{first_name} {last_name}']
+    def sort_contacts(self):
+        pass
 
-c = ContactHandler()
-# c.add_contact("Alan", "Joss")
-# c.add_contact("Haonan", "Nüssli")
-# c.add_contact("David", "Jäggli")
+if __name__ == "__main__":
+    c = ContactHandler()
+    c.add_contact("Alan", "Joss")
+    c.add_contact("Haonan", "Nüssli")
+    c.add_contact("David", "Jäggli")
 
-print(c.search_contact("David", "Jäggli"))

@@ -13,7 +13,7 @@ def enter_personal_data():
 
 if __name__ == "__main__":
     while True:
-        cmd = input("Enter command: ")
+        cmd = input("> ")
 
         if cmd == 'q':
             print("Quitting...")
@@ -24,3 +24,9 @@ if __name__ == "__main__":
 
         elif cmd == 'list':
             cHandler.list_contacts()
+
+        elif cmd == 'search':
+            cHandler.search_contact
+
+        elif len(cmd) > 0:
+            print("Command not valid")
