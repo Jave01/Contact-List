@@ -87,11 +87,3 @@ class ContactHandler:
             if search_first_name in first_name and search_last_name in last_name:
                 print(f"{index}. {first_name} {last_name}")
                 index += 1
-
-
-if __name__ == "__main__":
-    c = ContactHandler()
-    c.add_contact("Alan", "Joss")
-    c.add_contact("Haonan", "Nüssli")
-    c.add_contact("David", "Jäggli")
-
