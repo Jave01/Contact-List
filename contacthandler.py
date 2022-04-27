@@ -1,18 +1,43 @@
+from aifc import Error
 import json
+import platform
+import os
 
 class ContactHandler:
-    def __init__(self, path="./", filename="contacts"):
+    def __init__(self, path="./", filename="contacts.json"):
         self.path = path
         self.filename = filename
         self.file = None
+
+        if not self.filename.endswith('.json'):
+            raise ValueError("File must be of type json")
+
+        # Check path, make it absolute and create it if necessary
+        if platform.system() == "Windows":
+            if not self.path.startswith('C:\\'):
+                self.path = os.getcwd() + self.path + '\\'
+        elif platform.system() == "Linux":
+            if not self.path.startswith('/etc'):
+                self.path = os.getcwd() + self.path + '/'
+        else:
+            raise Error("OS Platform not supported")
+        
+        if os.path.exists(self.path):
+            if not os.path.isdir(self.path):
+                raise FileNotFoundError("Given path is not a directory")
+        else:
+            os.makedirs(self.path)
+
+
+        # Check if file exists and create one if not
         try:
-            with open(f'{self.path}{self.filename}.json', 'r') as f:
+            with open(f'{self.path}{self.filename}', 'r') as f:
                 pass
         except FileNotFoundError:
-            with open(f'{self.path}{self.filename}.json', 'w+') as f:
+            with open(f'{self.path}{self.filename}', 'w+') as f:
                 json.dump(dict(), f)
             
-        with open(f'{self.path}{self.filename}.json', 'r') as f:
+        with open(f'{self.path}{self.filename}', 'r') as f:
             self.contacts = json.load(f)
 
     def add_contact(self, first_name, last_name, mobile=0, home="", email="", address=""):
@@ -86,7 +111,6 @@ class ContactHandler:
         print(f'mobile: {contact["mobile"]}')
         print(f'home: {contact["home"]}')
         print(f'email: {contact["email"]}')
-        print(f'mobile: {contact["mobile"]}')
 
 
     def search_contact(self, search_first_name, search_last_name):

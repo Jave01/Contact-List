@@ -1,7 +1,7 @@
 from contacthandler import ContactHandler
 
 HELP_MESSAGE = "\
-Command arguments have to be entered after entering the command. The command itself takes no arguments\n\
+Command arguments have to be given after entering the command. The command itself takes no arguments\n\
 \n\
 Valid commands:\n\
     add         Create a new contact\n\
@@ -13,7 +13,9 @@ Valid commands:\n\
     q, quit     Quits the program\n\
 "
 
-cHandler = ContactHandler()
+
+cHandler = ContactHandler(path="\\testfolder\\easy-game", filename="dismami.json")
+
 
 def enter_personal_data(name=True, mobile=False, home=False, email=False, address=False, full=False):
     if name or full:
@@ -28,6 +30,7 @@ def enter_personal_data(name=True, mobile=False, home=False, email=False, addres
     if address or full:
         address = input("Address: ")
     return [first_name, last_name, mobile, home, email, address]
+
 
 if __name__ == "__main__":
     print('Enter help for information of how to use this module')
