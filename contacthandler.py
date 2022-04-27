@@ -66,11 +66,15 @@ class ContactHandler:
             break
 
         for i, name in enumerate(contact_names[start:stop]):
-            self._print_contact(name, i)
+            self.print_contact(name, i)
 
-    def _print_contact(self, name: str, index=-1):
+    def print_contact(self, name: str, index=-1):
+        if name not in self.contacts:
+            print("Contact does not exist")
+            return
+        print()     # new line
         contact = self.contacts[name]
-
+        # if an index is given it will be printed in front of the name
         if index == -1:
             print(name)
         else:
