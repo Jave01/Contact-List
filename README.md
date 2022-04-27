@@ -1,3 +1,4 @@
 # Contact list sample project
 
-Note: The branch mid-save does (most of the time) not contain fully working code. It is just for syncing files between computers
+Just a sample project for playing in python and skip boring school lessons.
+## Note: The branch mid-save does (most of the time) not contain fully working code. It is just for syncing files between computers
