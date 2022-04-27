@@ -1,11 +1,19 @@
 import json
 
 class ContactHandler:
-    def __init__(self, path="./"):
+    def __init__(self, path="./", filename="contacts"):
         self.path = path
-        with open(self.path + "contacts.json", "r") as f:
+        self.filename = filename
+        self.file = None
+        try:
+            with open(f'{self.path}{self.filename}.json', 'r') as f:
+                pass
+        except FileNotFoundError:
+            with open(f'{self.path}{self.filename}.json', 'w+') as f:
+                json.dump(dict(), f)
+            
+        with open(f'{self.path}{self.filename}.json', 'r') as f:
             self.contacts = json.load(f)
-
 
     def add_contact(self, first_name, last_name, mobile=0, home="", email="", address=""):
         if self.contacts.get(f"{first_name} {last_name}", None) != None:
@@ -20,34 +28,71 @@ class ContactHandler:
         with open(self.path + "contacts.json", "w") as f:
             json.dump(self.contacts, f)
 
+        print("Contact added")
 
     def del_contact(self, first_name, last_name):
-        del self.contacts[f"{first_name} {last_name}"]
-
+        name = first_name + ' ' + last_name
+        if name in self.contacts.keys():
+            del self.contacts[f"{first_name} {last_name}"]
+        else:
+            print("That contact doesn't exist")
 
     def list_contacts(self):
-        self.contact_list = []
+        # convert the contact names to a list and sort it by name
+        contact_names = sorted(list(self.contacts.keys()), key=lambda x: x[0])
+
+        # Get and validate the range of contacts that get printed
+        start = 0
+        stop = len(contact_names)
+        while True:
+            print_range = input(f'Enter range, empty -> whole range, max: {len(contact_names)}: ')
+            if print_range == "":
+                break
+            # handle if only one number is entered -> print from 0 to entered number
+            try:
+                start, stop = print_range.split()
+                start, stop = int(start), int(stop)
+            except ValueError:
+                # if range is numeric only one number is entered -> valid input
+                if print_range.isnumeric():
+                    stop = int(range)
+                    start = 0
+                    break
+                else:
+                    print("Range invalid. Enter one number or two numbers divided by a space")
+                    continue
+            if start > stop:
+                print("Stop value can't be bigger than the start value")
+                continue
+            if stop > len(contact_names) or stop < 0:
+                print("Stop value to big/small")
+                continue
+            if start < 0:
+                print("Start value to small")
+                continue
+            break
+
+        for name in contact_names[start:stop]:
+            self.print_contact(name)
+
+    def print_contact(self, name: str):
+        if name not in self.contacts:
+            print("Contact does not exist")
+            return
+        print()     # new line
+        contact = self.contacts[name]
+        print(name)
+        print('-----------------------------')
+        print(f'mobile: {contact["mobile"]}')
+        print(f'home: {contact["home"]}')
+        print(f'email: {contact["email"]}')
+        print(f'mobile: {contact["mobile"]}')
+
+
+    def search_contact(self, search_first_name, search_last_name):
+        index = 1
         for name in self.contacts.keys():
-            self.contact_list.append([name, self.contacts[name]["mobile"], self.contacts[name]["home"], self.contacts[name]["email"], self.contacts[name]["address"]])
-        self._print_contacts()
-
-
-    def _print_contacts(self):
-        for i, element in enumerate(sorted(self.contact_list, key=lambda x: x[0])):
-            if element != None:
-                print(f'{i+1}. ' + element[0])
-                print(f"\tmobile: {element[1]}")
-                print(f"\thome: {element[2]}")
-                print(f"\temail: {element[3]}")
-                print(f"\tmobile: {element[4]}")
-
-
-    def search_contact(self, first_name, last_name):
-        return self.contacts[f'{first_name} {last_name}']
-
-c = ContactHandler()
-# c.add_contact("Alan", "Joss")
-# c.add_contact("Haonan", "Nüssli")
-# c.add_contact("David", "Jäggli")
-
-print(c.search_contact("David", "Jäggli"))
+            first_name, last_name = name.split()
+            if search_first_name in first_name and search_last_name in last_name:
+                print(f"{index}. {first_name} {last_name}")
+                index += 1
