@@ -1,11 +1,19 @@
 import json
 
 class ContactHandler:
-    def __init__(self, path="./"):
+    def __init__(self, path="./", filename="contacts"):
         self.path = path
-        with open(self.path + "contacts.json", "r") as f:
+        self.filename = filename
+        self.file = None
+        try:
+            with open(f'{self.path}{self.filename}.json', 'r') as f:
+                pass
+        except FileNotFoundError:
+            with open(f'{self.path}{self.filename}.json', 'w+') as f:
+                json.dump(dict(), f)
+            
+        with open(f'{self.path}{self.filename}.json', 'r') as f:
             self.contacts = json.load(f)
-
 
     def add_contact(self, first_name, last_name, mobile=0, home="", email="", address=""):
         if self.contacts.get(f"{first_name} {last_name}", None) != None:
@@ -34,20 +42,19 @@ class ContactHandler:
         contact_names = sorted(list(self.contacts.keys()), key=lambda x: x[0])
 
         # Get and validate the range of contacts that get printed
-        range_valid = False
         start = 0
         stop = len(contact_names)
-        while not range_valid:
-            range = input(f'Enter range, empty -> whole range, max: {len(contact_names)}: ')
-            if range == "":
+        while True:
+            print_range = input(f'Enter range, empty -> whole range, max: {len(contact_names)}: ')
+            if print_range == "":
                 break
-            # handle if only one number or is entered -> print from 0 to entered number
+            # handle if only one number is entered -> print from 0 to entered number
             try:
-                start, stop = range.split()
+                start, stop = print_range.split()
                 start, stop = int(start), int(stop)
             except ValueError:
                 # if range is numeric only one number is entered -> valid input
-                if range.isnumeric():
+                if print_range.isnumeric():
                     stop = int(range)
                     start = 0
                     break
@@ -65,24 +72,22 @@ class ContactHandler:
                 continue
             break
 
-        for i, name in enumerate(contact_names[start:stop]):
-            self.print_contact(name, i)
+        for name in contact_names[start:stop]:
+            self.print_contact(name)
 
-    def print_contact(self, name: str, index=-1):
+    def print_contact(self, name: str):
         if name not in self.contacts:
             print("Contact does not exist")
             return
         print()     # new line
         contact = self.contacts[name]
-        # if an index is given it will be printed in front of the name
-        if index == -1:
-            print(name)
-        else:
-            print(f'{index+1}. ' + name)
-        print(f'\tmobile: {contact["mobile"]}')
-        print(f'\thome: {contact["home"]}')
-        print(f'\temail: {contact["email"]}')
-        print(f'\tmobile: {contact["mobile"]}')
+        print(name)
+        print('-----------------------------')
+        print(f'mobile: {contact["mobile"]}')
+        print(f'home: {contact["home"]}')
+        print(f'email: {contact["email"]}')
+        print(f'mobile: {contact["mobile"]}')
+
 
     def search_contact(self, search_first_name, search_last_name):
         index = 1
