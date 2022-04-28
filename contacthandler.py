@@ -1,4 +1,3 @@
-from aifc import Error
 import json
 import platform
 import os
