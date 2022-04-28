@@ -14,7 +14,7 @@ Valid commands:\n\
 "
 
 
-cHandler = ContactHandler(path="\\testfolder\\easy-game", filename="dismami.json")
+cHandler = ContactHandler()
 
 
 def enter_personal_data(name=True, mobile=False, home=False, email=False, address=False, full=False):
@@ -29,7 +29,8 @@ def enter_personal_data(name=True, mobile=False, home=False, email=False, addres
         email = input("Email: ")
     if address or full:
         address = input("Address: ")
-    return [first_name, last_name, mobile, home, email, address]
+
+    return [x for x in [first_name, last_name, mobile, home, email, address] if x != False] # only return entered values
 
 
 if __name__ == "__main__":
@@ -46,14 +47,13 @@ if __name__ == "__main__":
 
         elif cmd == 'list':
             cHandler.list_contacts()
+            print() # new line
 
         elif cmd == 'search':
-            inp = enter_personal_data(name=True)
-            cHandler.search_contact(inp[0], inp[1])
+            cHandler.search_contact(*enter_personal_data(name=True))
 
         elif cmd == 'del':
-            inp = enter_personal_data(name=True)
-            cHandler.del_contact(inp[0], inp[1])
+            cHandler.del_contact(*enter_personal_data(name=True))
 
         elif cmd == 'print':
             inp = enter_personal_data(name=True)
