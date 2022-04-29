@@ -14,7 +14,7 @@ Valid commands:\n\
 "
 
 
-cHandler = ContactHandler(path="\\testfolder\\easy-game", filename="dismami.json")
+cHandler = ContactHandler(path="ContactList/testfolder", filename="random.json")
 
 
 def enter_personal_data(name=True, mobile=False, home=False, email=False, address=False, full=False):
@@ -29,7 +29,7 @@ def enter_personal_data(name=True, mobile=False, home=False, email=False, addres
         email = input("Email: ")
     if address or full:
         address = input("Address: ")
-    return [first_name, last_name, mobile, home, email, address]
+    return {"first_name": first_name, "last_name": last_name, "mobile": mobile, "home": home, "email": email, "address": address}
 
 
 if __name__ == "__main__":
@@ -42,22 +42,20 @@ if __name__ == "__main__":
             exit()
 
         elif cmd == 'add':
-            cHandler.add_contact(*enter_personal_data(full=True))
+            cHandler.add_contact(**enter_personal_data(full=True))
 
         elif cmd == 'list':
             cHandler.list_contacts()
 
         elif cmd == 'search':
-            inp = enter_personal_data(name=True)
-            cHandler.search_contact(inp[0], inp[1])
+            cHandler.search_contact(**enter_personal_data(name=True))
 
         elif cmd == 'del':
-            inp = enter_personal_data(name=True)
-            cHandler.del_contact(inp[0], inp[1])
+            cHandler.del_contact(**enter_personal_data(name=True))
 
         elif cmd == 'print':
             inp = enter_personal_data(name=True)
-            cHandler.print_contact(inp[0] + ' ' + inp[1])
+            cHandler.print_contact(inp["first_name"] + ' ' + inp["last_name"])
 
         elif cmd == 'h' or cmd == 'help':
             print(HELP_MESSAGE)

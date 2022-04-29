@@ -12,32 +12,44 @@ class ContactHandler:
         if not self.filename.endswith('.json'):
             raise ValueError("File must be of type json")
 
-        # Check path, make it absolute and create it if necessary
         if platform.system() == "Windows":
-            if not self.path.startswith('C:\\'):
-                self.path = os.getcwd() + self.path + '\\'
+            self.DIR_SPLIT_CHAR = '\\'
+            self.ABS_PATH_INITIAL_STR = 'C:\\'
         elif platform.system() == "Linux":
-            if not self.path.startswith('/etc'):
-                self.path = os.getcwd() + self.path + '/'
+            self.DIR_SPLIT_CHAR = '/'
+            self.ABS_PATH_INITIAL_STR = '/home'
         else:
-            raise Error("OS Platform not supported")
-        
+            raise SystemError('OS Platform not supported')
+
+        if not self.path.startswith(self.ABS_PATH_INITIAL_STR):
+            # if path is relative get path to running file and remove the filename
+            path_to_file = self.DIR_SPLIT_CHAR.join(__file__.split('/')[:-1])
+            # combine path to file with the given relative path to make an absolute path
+            self.path = path_to_file + self.DIR_SPLIT_CHAR + self.path
+
+        # don't know why it works that way but can't add it in the sum above
+        self.path += self.DIR_SPLIT_CHAR
+
+        self.path.replace(2 * self.DIR_SPLIT_CHAR, self.DIR_SPLIT_CHAR)
+
+        # if the path already exists it must be a directory, otherwise the directories are created
         if os.path.exists(self.path):
             if not os.path.isdir(self.path):
                 raise FileNotFoundError("Given path is not a directory")
         else:
             os.makedirs(self.path)
 
+        self.filepath = self.path + self.filename
 
         # Check if file exists and create one if not
         try:
-            with open(f'{self.path}{self.filename}', 'r') as f:
+            with open(f'{self.filepath}', 'r') as f:
                 pass
         except FileNotFoundError:
-            with open(f'{self.path}{self.filename}', 'w+') as f:
+            with open(f'{self.filepath}', 'w+') as f:
                 json.dump(dict(), f)
             
-        with open(f'{self.path}{self.filename}', 'r') as f:
+        with open(f'{self.filepath}', 'r') as f:
             self.contacts = json.load(f)
 
     def add_contact(self, first_name, last_name, mobile=0, home="", email="", address=""):
