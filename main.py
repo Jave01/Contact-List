@@ -43,7 +43,7 @@ if __name__ == "__main__":
             exit()
 
         elif cmd == 'add':
-            cHandler.add_contact(**enter_personal_data(full=True))
+            cHandler.add_contact(*enter_personal_data(full=True))
 
         elif cmd == 'list':
             cHandler.list_contacts()
