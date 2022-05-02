@@ -78,17 +78,17 @@ class ContactHandler:
         self.contacts[f"{first_name} {last_name}"]["email"] = email
         self.contacts[f"{first_name} {last_name}"]["address"] = address
 
-        with open(self.path + "contacts.json", "w") as f:
+        with open(self.filepath, "w") as f:
             json.dump(self.contacts, f)
 
-        print("Contact added")
+        return True
 
     def del_contact(self, first_name, last_name) -> bool:
         name = first_name + ' ' + last_name
         if name in self.contacts.keys():
             del self.contacts[f"{first_name} {last_name}"]
         else:
-            return False
+            raise NameError("Contact already exists")
         return True
 
     def list_contacts(self):
@@ -130,6 +130,8 @@ class ContactHandler:
         for name in contact_names[start-1:stop]:
             self.print_contact(name)
 
+        return len(contact_names) > 0
+
     def print_contact(self, name: str):
         if name not in self.contacts:
             return False
@@ -143,7 +145,6 @@ class ContactHandler:
         print(f'address: {contact["address"]}')
 
         return True
-
 
     def search_contact(self, search_first_name, search_last_name):
         index = 1

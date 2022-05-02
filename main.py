@@ -14,7 +14,7 @@ Valid commands:\n\
 "
 
 
-cHandler = ContactHandler(path="ContactList/testfolder", filename="random.json")
+cHandler = ContactHandler(path="contacts/", filename="1.json")
 
 
 def enter_personal_data(name=True, mobile=False, home=False, email=False, address=False, full=False):
@@ -44,11 +44,14 @@ def main():
 
         elif cmd == 'add':
             data = enter_personal_data(full=True)
+            if cHandler.add_contact(*data):
+                print("Contact added")
 
         elif cmd == 'list':
             if not cHandler.list_contacts():
                 print("No contacts found")
-            print() # new line
+            else:
+                print() # new line
 
         elif cmd == 'search':
             data = enter_personal_data(name=True)
@@ -57,8 +60,8 @@ def main():
 
         elif cmd == 'del':
             data = enter_personal_data(name=True)
-            if not cHandler.del_contact(*data):
-                print("Contact doesn't exist")
+            if cHandler.del_contact(*data):
+                print("Contact deleted")
 
         elif cmd == 'print':
             inp = enter_personal_data(name=True)
