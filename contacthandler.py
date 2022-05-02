@@ -52,6 +52,22 @@ class ContactHandler:
         with open(f'{self.filepath}', 'r') as f:
             self.contacts = json.load(f)
 
+    def validate_email(self, email: str) -> bool:
+        if email.count("@") != 1 or " " in email or not email[-1].isalpha():
+            return False
+
+        second_half = email.split("@")[1]
+        
+        if not second_half[0].isalpha() or second_half.count(".") != 1:
+            return False 
+        
+        return True
+
+    def validate_phone_number(self, phone_number: str) -> bool:
+        number = phone_number.split()
+
+        return number.isalpha()
+
     def add_contact(self, first_name, last_name, mobile=0, home="", email="", address=""):
         if self.contacts.get(f"{first_name} {last_name}", None) != None:
             raise NameError("Contact already exists")
@@ -67,14 +83,13 @@ class ContactHandler:
 
         print("Contact added")
 
-    def del_contact(self, first_name, last_name):
+    def del_contact(self, first_name, last_name) -> bool:
         name = first_name + ' ' + last_name
         if name in self.contacts.keys():
             del self.contacts[f"{first_name} {last_name}"]
         else:
-            print("That contact doesn't exist")
-            return
-        print("Contact deleted")
+            return False
+        return True
 
     def list_contacts(self):
         # convert the contact names to a list and sort it by name
@@ -117,8 +132,7 @@ class ContactHandler:
 
     def print_contact(self, name: str):
         if name not in self.contacts:
-            print("Contact does not exist")
-            return
+            return False
         print()     # new line
         contact = self.contacts[name]
         print(name)
@@ -128,6 +142,8 @@ class ContactHandler:
         print(f'email: {contact["email"]}')
         print(f'address: {contact["address"]}')
 
+        return True
+
 
     def search_contact(self, search_first_name, search_last_name):
         index = 1
@@ -136,3 +152,6 @@ class ContactHandler:
             if search_first_name in first_name and search_last_name in last_name:
                 print(f"{index}. {first_name} {last_name}")
                 index += 1
+
+        # check if some contacts were found
+        return not index == 1
