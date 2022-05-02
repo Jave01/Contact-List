@@ -33,7 +33,7 @@ def enter_personal_data(name=True, mobile=False, home=False, email=False, addres
     return [x for x in [first_name, last_name, mobile, home, email, address] if x != False] # only return entered values
 
 
-if __name__ == "__main__":
+def main():
     print('Enter help for information of how to use this module')
     while True:
         cmd = input("> ")
@@ -43,24 +43,34 @@ if __name__ == "__main__":
             exit()
 
         elif cmd == 'add':
-            cHandler.add_contact(*enter_personal_data(full=True))
+            data = enter_personal_data(full=True)
 
         elif cmd == 'list':
-            cHandler.list_contacts()
+            if not cHandler.list_contacts():
+                print("No contacts found")
             print() # new line
 
         elif cmd == 'search':
-            cHandler.search_contact(*enter_personal_data(name=True))
+            data = enter_personal_data(name=True)
+            if not cHandler.search_contact(*data):
+                print("No contact found")
 
         elif cmd == 'del':
-            cHandler.del_contact(*enter_personal_data(name=True))
+            data = enter_personal_data(name=True)
+            if not cHandler.del_contact(*data):
+                print("Contact doesn't exist")
 
         elif cmd == 'print':
             inp = enter_personal_data(name=True)
-            cHandler.print_contact(inp["first_name"] + ' ' + inp["last_name"])
+            if not cHandler.print_contact(inp["first_name"] + ' ' + inp["last_name"]):
+                print("Contact doesn't exist")
 
         elif cmd == 'h' or cmd == 'help':
             print(HELP_MESSAGE)
 
         elif len(cmd) > 0:
             print("Command not valid")
+
+
+if __name__ == "__main__":
+    main()
