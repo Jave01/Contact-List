@@ -19,14 +19,27 @@ class ContactHandler:
             self.DIR_SPLIT_CHAR = '/'
             self.ABS_PATH_INITIAL_STR = '/home'
         else:
-            raise SystemError("OS Platform not supported")
-        
-        # create dir if necessary
+            raise SystemError('OS Platform not supported')
+
+        if not self.path.startswith(self.ABS_PATH_INITIAL_STR):
+            # if path is relative get path to running file and remove the filename
+            path_to_file = self.DIR_SPLIT_CHAR.join(__file__.split('/')[:-1])
+            # combine path to file with the given relative path to make an absolute path
+            self.path = path_to_file + self.DIR_SPLIT_CHAR + self.path
+
+        # don't know why it works that way but can't add it in the sum above
+        self.path += self.DIR_SPLIT_CHAR
+
+        self.path.replace(2 * self.DIR_SPLIT_CHAR, self.DIR_SPLIT_CHAR)
+
+        # if the path already exists it must be a directory, otherwise the directories are created
         if os.path.exists(self.path):
             if not os.path.isdir(self.path):
                 raise FileNotFoundError("Given path is not a directory")
         else:
             os.makedirs(self.path)
+
+        self.filepath = self.path + self.filename
 
         # Check if file exists and create one if not
         try:
