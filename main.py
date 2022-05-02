@@ -29,7 +29,8 @@ def enter_personal_data(name=True, mobile=False, home=False, email=False, addres
         email = input("Email: ")
     if address or full:
         address = input("Address: ")
-    return {"first_name": first_name, "last_name": last_name, "mobile": mobile, "home": home, "email": email, "address": address}
+
+    return [x for x in [first_name, last_name, mobile, home, email, address] if x != False] # only return entered values
 
 
 if __name__ == "__main__":
@@ -46,12 +47,13 @@ if __name__ == "__main__":
 
         elif cmd == 'list':
             cHandler.list_contacts()
+            print() # new line
 
         elif cmd == 'search':
-            cHandler.search_contact(**enter_personal_data(name=True))
+            cHandler.search_contact(*enter_personal_data(name=True))
 
         elif cmd == 'del':
-            cHandler.del_contact(**enter_personal_data(name=True))
+            cHandler.del_contact(*enter_personal_data(name=True))
 
         elif cmd == 'print':
             inp = enter_personal_data(name=True)
