@@ -1,7 +1,7 @@
 from contacthandler import ContactHandler
 
 HELP_MESSAGE = "\
-Command arguments have to be entered after entering the command. The command itself takes no arguments\n\
+Command arguments have to be given after entering the command. The command itself takes no arguments\n\
 \n\
 Valid commands:\n\
     add         Create a new contact\n\
@@ -13,7 +13,9 @@ Valid commands:\n\
     q, quit     Quits the program\n\
 "
 
-cHandler = ContactHandler()
+
+cHandler = ContactHandler(path="ContactList/testfolder", filename="random.json")
+
 
 def enter_personal_data(name=True, mobile=False, home=False, email=False, address=False, full=False):
     if name or full:
@@ -27,7 +29,9 @@ def enter_personal_data(name=True, mobile=False, home=False, email=False, addres
         email = input("Email: ")
     if address or full:
         address = input("Address: ")
-    return [first_name, last_name, mobile, home, email, address]
+
+    return [x for x in [first_name, last_name, mobile, home, email, address] if x != False] # only return entered values
+
 
 if __name__ == "__main__":
     print('Enter help for information of how to use this module')
@@ -43,18 +47,17 @@ if __name__ == "__main__":
 
         elif cmd == 'list':
             cHandler.list_contacts()
+            print() # new line
 
         elif cmd == 'search':
-            inp = enter_personal_data(name=True)
-            cHandler.search_contact(inp[0], inp[1])
+            cHandler.search_contact(*enter_personal_data(name=True))
 
         elif cmd == 'del':
-            inp = enter_personal_data(name=True)
-            cHandler.del_contact(inp[0], inp[1])
+            cHandler.del_contact(*enter_personal_data(name=True))
 
         elif cmd == 'print':
             inp = enter_personal_data(name=True)
-            cHandler.print_contact(inp[0] + ' ' + inp[1])
+            cHandler.print_contact(inp["first_name"] + ' ' + inp["last_name"])
 
         elif cmd == 'h' or cmd == 'help':
             print(HELP_MESSAGE)
