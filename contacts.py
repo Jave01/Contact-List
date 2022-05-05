@@ -1,6 +1,6 @@
 import json
 
-class ContactHandler:
+class ContactManager:
     def __init__(self, path="./"):
         self.path = path
         with open(self.path + "contacts.json", "r") as f:

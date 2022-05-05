@@ -1,4 +1,4 @@
-from contacthandler import ContactHandler
+from contacts import ContactManager
 
 HELP_MESSAGE = "\n\
 Command arguments have to be entered after entering the command. The command itself takes no arguments\n\
@@ -12,7 +12,7 @@ Valid commands:\n\
     q, quit     Quits the program\n\
 "
 
-cHandler = ContactHandler()
+manager = ContactManager()
 
 def enter_personal_data():
     first_name = input("First Name: ")
@@ -33,20 +33,20 @@ if __name__ == "__main__":
             exit()
 
         elif cmd == 'add':
-            cHandler.add_contact(*enter_personal_data())
+            manager.add_contact(*enter_personal_data())
 
         elif cmd == 'list':
-            cHandler.list_contacts()
+            manager.list_contacts()
 
         elif cmd == 'search':
             first_name = input("First name: ")
             last_name = input("Last name: ")
-            cHandler.search_contact(first_name, last_name)
+            manager.search_contact(first_name, last_name)
 
         elif cmd == 'del':
             first_name = input("First name: ")
             last_name = input("Last name: ")
-            cHandler.del_contact(first_name, last_name)
+            manager.del_contact(first_name, last_name)
 
         elif cmd == 'h' or cmd == 'help':
             print(HELP_MESSAGE)
