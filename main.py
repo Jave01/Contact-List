@@ -1,4 +1,4 @@
-from contacthandler import ContactHandler
+from contacts import Manager
 
 HELP_MESSAGE = "\
 Command arguments have to be given after entering the command. The command itself takes no arguments\n\
@@ -14,7 +14,7 @@ Valid commands:\n\
 "
 
 
-cHandler = ContactHandler(path="contacts/", filename="1.json")
+manager = Manager(path="contacts/", filename="1.json")
 
 
 def enter_personal_data(name=True, mobile=False, home=False, email=False, address=False, full=False):
@@ -44,28 +44,28 @@ def main():
 
         elif cmd == 'add':
             data = enter_personal_data(full=True)
-            if cHandler.add_contact(*data):
+            if manager.add_contact(*data):
                 print("Contact added")
 
         elif cmd == 'list':
-            if not cHandler.list_contacts():
+            if not manager.list_contacts():
                 print("No contacts found")
             else:
                 print() # new line
 
         elif cmd == 'search':
             data = enter_personal_data(name=True)
-            if not cHandler.search_contact(*data):
+            if not manager.search_contact(*data):
                 print("No contact found")
 
         elif cmd == 'del':
             data = enter_personal_data(name=True)
-            if cHandler.del_contact(*data):
+            if manager.del_contact(*data):
                 print("Contact deleted")
 
         elif cmd == 'print':
             inp = enter_personal_data(name=True)
-            if not cHandler.print_contact(inp["first_name"] + ' ' + inp["last_name"]):
+            if not manager.print_contact(inp["first_name"] + ' ' + inp["last_name"]):
                 print("Contact doesn't exist")
 
         elif cmd == 'h' or cmd == 'help':

@@ -2,7 +2,7 @@ import json
 import platform
 import os
 
-class ContactHandler:
+class Manager:
     def __init__(self, path="./", filename="contacts.json"):
         self.path = path
         self.filename = filename
