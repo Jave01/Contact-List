@@ -43,6 +43,7 @@ if __name__ == "__main__":
 
         elif cmd == 'list':
             cHandler.list_contacts()
+            print() # new line
 
         elif cmd == 'search':
             inp = enter_personal_data(name=True)

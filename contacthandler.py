@@ -55,7 +55,7 @@ class ContactHandler:
             except ValueError:
                 # if range is numeric only one number is entered -> valid input
                 if print_range.isnumeric():
-                    stop = int(range)
+                    stop = int(print_range)
                     start = 0
                     break
                 else:
