@@ -1,7 +1,7 @@
-from contacthandler import ContactHandler
+from contacts import Manager
 
 HELP_MESSAGE = "\
-Command arguments have to be entered after entering the command. The command itself takes no arguments\n\
+Command arguments have to be given after entering the command. The command itself takes no arguments\n\
 \n\
 Valid commands:\n\
     add         Create a new contact\n\
@@ -13,7 +13,9 @@ Valid commands:\n\
     q, quit     Quits the program\n\
 "
 
-cHandler = ContactHandler()
+
+manager = Manager(path="contacts/", filename="1.json")
+
 
 def enter_personal_data(name=True, mobile=False, home=False, email=False, address=False, full=False):
     if name or full:
@@ -27,9 +29,11 @@ def enter_personal_data(name=True, mobile=False, home=False, email=False, addres
         email = input("Email: ")
     if address or full:
         address = input("Address: ")
-    return [first_name, last_name, mobile, home, email, address]
 
-if __name__ == "__main__":
+    return [x for x in [first_name, last_name, mobile, home, email, address] if x != False] # only return entered values
+
+
+def main():
     print('Enter help for information of how to use this module')
     while True:
         cmd = input("> ")
@@ -39,26 +43,42 @@ if __name__ == "__main__":
             exit()
 
         elif cmd == 'add':
-            cHandler.add_contact(*enter_personal_data(full=True))
+            data = enter_personal_data(full=True)
+            if manager.add_contact(*data):
+                print("Contact added")
 
         elif cmd == 'list':
+<<<<<<< HEAD
             cHandler.list_contacts()
             print() # new line
+=======
+            if not manager.list_contacts():
+                print("No contacts found")
+            else:
+                print() # new line
+>>>>>>> mid-save
 
         elif cmd == 'search':
-            inp = enter_personal_data(name=True)
-            cHandler.search_contact(inp[0], inp[1])
+            data = enter_personal_data(name=True)
+            if not manager.search_contact(*data):
+                print("No contact found")
 
         elif cmd == 'del':
-            inp = enter_personal_data(name=True)
-            cHandler.del_contact(inp[0], inp[1])
+            data = enter_personal_data(name=True)
+            if manager.del_contact(*data):
+                print("Contact deleted")
 
         elif cmd == 'print':
             inp = enter_personal_data(name=True)
-            cHandler.print_contact(inp[0] + ' ' + inp[1])
+            if not manager.print_contact(inp["first_name"] + ' ' + inp["last_name"]):
+                print("Contact doesn't exist")
 
         elif cmd == 'h' or cmd == 'help':
             print(HELP_MESSAGE)
 
         elif len(cmd) > 0:
             print("Command not valid")
+
+
+if __name__ == "__main__":
+    main()
