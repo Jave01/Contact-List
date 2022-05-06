@@ -110,7 +110,6 @@ class Manager:
                 # if range is numeric only one number is entered -> valid input
                 if print_range.isnumeric():
                     stop = int(print_range)
-                    start = 0
                     break
                 else:
                     print("Range invalid. Enter one number or two numbers divided by a space")
